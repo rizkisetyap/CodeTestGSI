@@ -105,24 +105,25 @@ namespace CodeTestGSI
 
         public string Question4(string input)
         {
-            var inputArray = input.ToCharArray();
+            var inputArray = input.ToCharArray().Select((value, i) => (value, i)).ToList();
             var outputTotal = 0;
             var inputTotal = 0;
             var output = "";
             var newOutput = "";
 
-            foreach (var item in inputArray)
+            var last2valueIdx = new int[] { inputArray.Count - 1, inputArray.Count - 2 };
+            foreach (var (item, index) in inputArray)
             {
                 if (dictionary.TryGetValue(item, out int value))
                 {
                     inputTotal += value;
                 }
             }
-            foreach (var item in inputArray)
+            foreach (var (item, index) in inputArray)
             {
 
                 if (!dictionary.TryGetValue(item, out int value)) continue;
-                if (inputTotal - outputTotal == 1)
+                if (last2valueIdx.Contains(index))
                 {
                     int newValue = value + 1;
                     var newKey = dictionary.Where(x => x.Value == newValue).FirstOrDefault().Key;
